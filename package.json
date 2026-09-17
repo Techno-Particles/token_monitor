@@ -1,0 +1,117 @@
+{
+  "name": "ai-usage-monitor",
+  "displayName": "AI Usage Monitor",
+  "description": "Privacy-first local token usage analytics for AI coding assistants in VS Code",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.138.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "AI",
+    "usage",
+    "tokens",
+    "Codex",
+    "analytics"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:ai-usage-monitor.showUsage",
+    "onCommand:ai-usage-monitor.openDashboard"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ai-usage-monitor.showUsage",
+        "title": "AI Usage Monitor: Show Usage"
+      },
+      {
+        "command": "ai-usage-monitor.resetHistory",
+        "title": "Reset Local Usage History"
+      },
+      {
+        "command": "ai-usage-monitor.openDashboard",
+        "title": "AI Usage Monitor: Open Dashboard"
+      }
+    ],
+    "configuration": {
+      "title": "AI Usage Monitor",
+      "properties": {
+        "aiUsageMonitor.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable local AI usage tracking and provider watchers."
+        },
+        "aiUsageMonitor.statusBar.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the AI Usage Monitor status-bar item."
+        },
+        "aiUsageMonitor.statusBar.showRateLimits": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show provider-reported rate-limit details in the status bar."
+        },
+        "aiUsageMonitor.history.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add new usage snapshots to local history. Existing history is preserved when disabled."
+        },
+        "aiUsageMonitor.history.retentionDays": {
+          "type": "number",
+          "default": 365,
+          "minimum": 1,
+          "maximum": 3650,
+          "description": "Number of recent local calendar days to retain in daily history. Session lifetime totals are preserved."
+        },
+        "aiUsageMonitor.dashboard.defaultRange": {
+          "type": "string",
+          "enum": [
+            "7d",
+            "30d"
+          ],
+          "enumDescriptions": [
+            "Show the last 7 days by default.",
+            "Show the last 30 days by default."
+          ],
+          "default": "7d",
+          "description": "Default dashboard chart range."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.138.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "24.x",
+    "typescript-eslint": "^8.61.1",
+    "eslint": "^10.5.0",
+    "esbuild": "^0.28.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^6.0.3",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0"
+  },
+  "overrides": {
+    "diff": "^8.0.4",
+    "serialize-javascript": "^7.0.6"
+  }
+}
